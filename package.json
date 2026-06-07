@@ -1,0 +1,11 @@
+{
+  "name": "@shutterly/plugin-filmpalast",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "index.ts",
+  "dependencies": {
+    "@shutterly/sdk": "file:../sdk",
+    "node-html-parser": "^6.1.13"
+  }
+}
