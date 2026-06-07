@@ -2,7 +2,7 @@
 
 # otter-plugin-filmpalast
 
-<img src="./logo.png" width="64" height="64" alt="FilmPalast logo" />
+<img src="./logo.png" width="256" alt="FilmPalast logo" />
 
 **Otter plugin for [filmpalast.to](https://filmpalast.to)**
 
