@@ -1,40 +1,84 @@
+<div align="center">
+
 # otter-plugin-filmpalast
 
-[Otter](https://github.com/neoworks-dev/otter) plugin for [filmpalast.to](https://filmpalast.to) — a German streaming site hosting movies and series.
+<img src="https://filmpalast.to/favicon.ico" width="64" height="64" alt="FilmPalast logo" />
+
+**Otter plugin for [filmpalast.to](https://filmpalast.to)**
+
+Discover, search, and scrape movies and series from the German streaming site.
+
+![version](https://img.shields.io/badge/version-0.1.0-blue)
+![capabilities](https://img.shields.io/badge/capabilities-discover%20%7C%20search%20%7C%20scrape-green)
+
+</div>
+
+---
+
+## Overview
+
+filmpalast.to is a German-language streaming site with a large catalog of movies and series. This plugin integrates it into Otter's plugin pipeline — crawling the catalog in bulk, resolving titles via search, and scraping full metadata and stream links on demand.
 
 ## Capabilities
 
 | Capability | Description |
 |------------|-------------|
-| `discover` | Crawls the full movie and series catalog, returning minimal stubs |
-| `search` | Queries filmpalast.to's title search endpoint |
-| `scrape` | Fetches full metadata and stream links for a movie or series episode URL |
+| `discover` | Crawls the full catalog (movies + series), returning minimal stubs with title, poster, and source URL |
+| `search` | Queries filmpalast.to's title search endpoint and returns matching items |
+| `scrape` | Fetches full metadata and stream links for a given movie or episode URL |
 
 ## Scrape behavior
 
-- **Movie URL** (`/stream/<slug>`) — returns one `Movie` with title, description, genres, year, duration, poster, and stream download links
-- **Episode URL** (`/stream/<slug>-s01e01`) — scrapes all episodes visible on the page in parallel, returning a `Series` → `Season[]` → `Episode[]` tree with stream links per episode
+The scraper handles two URL shapes:
 
-## Install
+**Movie** — `/stream/<slug>`
 
-This plugin is loaded automatically by Otter when placed in the `plugins/` directory. Bun and dependencies are managed by the Otter backend.
+Returns a single `Movie` with title, description, genres, year, runtime, poster, and all available stream download links.
 
-```sh
-bun install
-```
+**Episode** — `/stream/<slug>-s01e01`
+
+Discovers all episodes linked from the page, scrapes them in parallel, and returns a full `Series → Season[] → Episode[]` tree. Each episode carries its own stream links.
 
 ## Development
+
+Input is JSON on stdin, one call at a time:
 
 ```sh
 bun run index.ts
 ```
 
-Input is read from stdin as JSON:
-
 ```json
 { "capability": "meta", "args": {} }
+```
+
+```json
 { "capability": "search", "args": { "query": "inception", "limit": 5 } }
+```
+
+```json
 { "capability": "scrape", "args": { "url": "https://filmpalast.to/stream/inception" } }
+```
+
+Output is JSON on stdout:
+
+```json
+{ "result": { ... } }
+```
+
+or on error:
+
+```json
+{ "error": "message" }
+```
+
+## Installation
+
+Managed automatically by Otter. When placed in the `plugins/` directory, Otter runs `bun install` on first load and invokes `bun run index.ts` per request.
+
+To install dependencies manually:
+
+```sh
+bun install
 ```
 
 ## License
