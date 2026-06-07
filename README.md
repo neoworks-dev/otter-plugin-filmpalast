@@ -2,7 +2,7 @@
 
 # otter-plugin-filmpalast
 
-<img src="https://filmpalast.to/favicon.ico" width="64" height="64" alt="FilmPalast logo" />
+<img src="./logo.png" width="64" height="64" alt="FilmPalast logo" />
 
 **Otter plugin for [filmpalast.to](https://filmpalast.to)**
 
@@ -21,11 +21,11 @@ filmpalast.to is a German-language streaming site with a large catalog of movies
 
 ## Capabilities
 
-| Capability | Description |
-|------------|-------------|
+| Capability | Description                                                                                           |
+| ---------- | ----------------------------------------------------------------------------------------------------- |
 | `discover` | Crawls the full catalog (movies + series), returning minimal stubs with title, poster, and source URL |
-| `search` | Queries filmpalast.to's title search endpoint and returns matching items |
-| `scrape` | Fetches full metadata and stream links for a given movie or episode URL |
+| `search`   | Queries filmpalast.to's title search endpoint and returns matching items                              |
+| `scrape`   | Fetches full metadata and stream links for a given movie or episode URL                               |
 
 ## Scrape behavior
 
@@ -56,7 +56,10 @@ bun run index.ts
 ```
 
 ```json
-{ "capability": "scrape", "args": { "url": "https://filmpalast.to/stream/inception" } }
+{
+  "capability": "scrape",
+  "args": { "url": "https://filmpalast.to/stream/inception" }
+}
 ```
 
 Output is JSON on stdout:
