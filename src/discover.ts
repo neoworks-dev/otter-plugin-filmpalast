@@ -1,5 +1,5 @@
 import { parse } from "node-html-parser";
-import { fetchHtml } from "@shutterly/sdk";
+import { fetchHtml } from "@neoworks-dev/otter-sdk";
 import {
   resolveUrl,
   BASE_URL,
@@ -7,7 +7,7 @@ import {
   isEpisodeSlug,
   seriesSlugFromEpisode,
 } from "./http.ts";
-import type { DiscoverResult, DiscoveredItem } from "@shutterly/sdk";
+import type { DiscoverResult, DiscoveredItem } from "@neoworks-dev/otter-sdk";
 
 export async function discover(query: string, limit: number): Promise<DiscoverResult> {
   const q = query.trim().toLowerCase();

@@ -1,4 +1,4 @@
-import { runPlugin } from "@shutterly/sdk";
+import { runPlugin } from "@neoworks-dev/otter-sdk";
 import { discover } from "./src/discover.ts";
 import { scrape } from "./src/scrape.ts";
 import { search } from "./src/search.ts";

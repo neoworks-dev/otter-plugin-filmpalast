@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.ts",
   "dependencies": {
-    "@shutterly/sdk": "file:../sdk",
+    "@neoworks-dev/otter-sdk": "link:@neoworks-dev/otter-sdk",
     "node-html-parser": "^6.1.13"
   }
 }

@@ -1,7 +1,7 @@
 import { parse } from "node-html-parser";
-import { fetchHtml } from "@shutterly/sdk";
+import { fetchHtml } from "@neoworks-dev/otter-sdk";
 import { BASE_URL, resolveUrl, slugFromUrl, isEpisodeSlug, seriesSlugFromEpisode } from "./http.ts";
-import type { SearchResult, DiscoveredItem } from "@shutterly/sdk";
+import type { SearchResult, DiscoveredItem } from "@neoworks-dev/otter-sdk";
 
 export async function search(query: string, limit?: number): Promise<SearchResult> {
   if (!query.trim()) return { items: [] };

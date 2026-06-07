@@ -1,5 +1,5 @@
 import { parse, HTMLElement } from "node-html-parser";
-import { fetchHtml } from "@shutterly/sdk";
+import { fetchHtml } from "@neoworks-dev/otter-sdk";
 import {
   resolveUrl,
   BASE_URL,
@@ -18,7 +18,7 @@ import type {
   Download,
   ContentRating,
   MediaBase,
-} from "@shutterly/sdk";
+} from "@neoworks-dev/otter-sdk";
 
 export async function scrape(url: string): Promise<ScrapeResult[]> {
   const slug = slugFromUrl(resolveUrl(url));
