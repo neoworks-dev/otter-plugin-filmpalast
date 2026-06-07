@@ -1,17 +1,6 @@
-<div align="center">
-
 # otter-plugin-filmpalast
 
-<img src="./logo.png" width="256" alt="FilmPalast logo" />
-
-**Otter plugin for [filmpalast.to](https://filmpalast.to)**
-
-Discover, search, and scrape movies and series from the German streaming site.
-
-![version](https://img.shields.io/badge/version-0.1.0-blue)
-![capabilities](https://img.shields.io/badge/capabilities-discover%20%7C%20search%20%7C%20scrape-green)
-
-</div>
+Otter plugin for [filmpalast.to](https://filmpalast.to) — a German-language streaming site with a large catalog of movies and series. Supports bulk catalog discovery, title search, and full metadata scraping including stream links.
 
 ---
 
