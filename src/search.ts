@@ -35,7 +35,7 @@ export async function search(query: string, limit?: number): Promise<SearchResul
         media_type: "series",
         source_url: resolveUrl(href),
         external_id: `filmpalast-${seriesSlug}`,
-        poster: img ? resolveUrl(img.getAttribute("src") ?? "") : undefined,
+        poster_path: img ? resolveUrl(img.getAttribute("src") ?? "") : undefined,
       });
     } else {
       const title =
@@ -50,7 +50,7 @@ export async function search(query: string, limit?: number): Promise<SearchResul
         media_type: "movie",
         source_url: resolveUrl(href),
         external_id: `filmpalast-${slug}`,
-        poster: img ? resolveUrl(img.getAttribute("src") ?? "") : undefined,
+        poster_path: img ? resolveUrl(img.getAttribute("src") ?? "") : undefined,
       });
     }
 

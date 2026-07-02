@@ -9,7 +9,7 @@ runPlugin({
     display_name: "FilmPalast",
     description: "German streaming site — discover and scrape movies from filmpalast.to",
     icon: "https://filmpalast.to/favicon.ico",
-    version: "0.1.0",
+    version: "0.2.0",
     capabilities: ["discover", "scrape", "search"],
   },
   discover: (query, limit) => discover(query, limit),

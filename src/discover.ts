@@ -7,16 +7,56 @@ import {
   isEpisodeSlug,
   seriesSlugFromEpisode,
 } from "./http.ts";
+import { search } from "./search.ts";
 import type { DiscoverResult, DiscoveredItem } from "@neoworks-dev/otter-sdk";
 
 export async function discover(query: string, limit: number): Promise<DiscoverResult> {
-  const q = query.trim().toLowerCase();
+  const trimmed = query.trim();
+
+  // A specific query must hit the site's search endpoint, which covers the whole
+  // catalog. The /movies/new listing only holds recent releases, so browsing it
+  // misses any older title even when it exists on filmpalast.
+  if (trimmed) {
+    return { items: await searchAllVariants(trimmed, limit) };
+  }
+
+  // Empty query = browse mode: crawl the new-release listings.
   const half = limit > 0 ? Math.ceil(limit / 2) : 0;
   const [movies, series] = await Promise.all([
-    discoverMovies(q, half),
-    discoverSeries(q, half),
+    discoverMovies("", half),
+    discoverSeries("", half),
   ]);
   return { items: [...movies, ...series] };
+}
+
+// filmpalast's title search is punctuation- and language-sensitive: a full
+// "Main Title: Subtitle" often returns nothing while the main title alone
+// matches. Try a few variants and merge, deduping by external_id.
+function queryVariants(query: string): string[] {
+  const variants = [query];
+  const beforeSubtitle = query.split(/\s*[:–-]\s+/)[0]?.trim();
+  if (beforeSubtitle && beforeSubtitle !== query) {
+    variants.push(beforeSubtitle);
+  }
+  return variants;
+}
+
+async function searchAllVariants(query: string, limit: number): Promise<DiscoveredItem[]> {
+  const merged = new Map<string, DiscoveredItem>();
+  for (const variant of queryVariants(query)) {
+    let result;
+    try {
+      result = await search(variant, limit);
+    } catch {
+      continue;
+    }
+    for (const item of result.items) {
+      if (!merged.has(item.external_id)) merged.set(item.external_id, item);
+    }
+    if (limit > 0 && merged.size >= limit) break;
+  }
+  const items = Array.from(merged.values());
+  return limit > 0 ? items.slice(0, limit) : items;
 }
 
 async function discoverMovies(query: string, limit: number): Promise<DiscoveredItem[]> {
@@ -55,7 +95,7 @@ async function discoverMovies(query: string, limit: number): Promise<DiscoveredI
         media_type: "movie",
         source_url: resolveUrl(href),
         external_id: `filmpalast-${slug}`,
-        poster,
+        poster_path: poster,
       });
       added++;
     }
@@ -113,7 +153,7 @@ async function discoverSeries(query: string, limit: number): Promise<DiscoveredI
         media_type: "series",
         source_url: resolveUrl(href),
         external_id: `filmpalast-${seriesSlug}`,
-        poster,
+        poster_path: poster,
       });
       added++;
     }
