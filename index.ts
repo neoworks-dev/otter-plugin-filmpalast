@@ -1,18 +1,14 @@
 import { runPlugin } from "@neoworks-dev/otter-sdk";
-import { discover } from "./src/discover.ts";
-import { scrape } from "./src/scrape.ts";
-import { search } from "./src/search.ts";
+import { findStreams } from "./src/streams.ts";
 
 runPlugin({
   meta: {
     name: "filmpalast",
     display_name: "FilmPalast",
-    description: "German streaming site — discover and scrape movies from filmpalast.to",
+    description: "German streaming site — finds playable streams for movies and episodes on filmpalast.to",
     icon: "https://filmpalast.to/favicon.ico",
-    version: "0.2.0",
-    capabilities: ["discover", "scrape", "search"],
+    version: "0.3.0",
+    capabilities: ["streams"],
   },
-  discover: (query, limit) => discover(query, limit),
-  scrape: (url) => scrape(url),
-  search: ({ query, limit }) => search(query, limit),
+  streams: (args) => findStreams(args),
 });

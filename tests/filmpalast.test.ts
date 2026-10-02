@@ -10,8 +10,7 @@ import {
   BASE_URL,
 } from "../src/http.ts";
 import { search } from "../src/search.ts";
-import { scrape } from "../src/scrape.ts";
-import { discover } from "../src/discover.ts";
+import { findStreams } from "../src/streams.ts";
 
 // ---------------------------------------------------------------------------
 // Pure URL/slug helpers (no network)
@@ -77,43 +76,21 @@ describe("search (live)", () => {
   );
 });
 
-describe("discover (live)", () => {
+describe("findStreams (live)", () => {
   test(
-    "returns a bounded set of catalog stubs",
-    async () => {
-      const { items } = await discover("", 6);
-      expect(items.length).toBeGreaterThan(0);
-      expect(items.length).toBeLessThanOrEqual(6);
-      for (const item of items) {
-        expect(item.source_url).toContain("/stream/");
-        expect(item.external_id).toStartWith("filmpalast-");
-      }
-    },
-    2 * NET_TIMEOUT
-  );
-});
-
-describe("scrape (live)", () => {
-  test(
-    "scrapes a real movie surfaced by search",
+    "finds playable links for a movie surfaced by search",
     async () => {
       const { items } = await search(QUERY, 20);
       const movieHit = items.find((i) => i.media_type === "movie");
       expect(movieHit).toBeDefined();
 
-      const results = await scrape(movieHit!.source_url);
-      // Narrow via the discriminant so `.movie` is typed as Movie.
-      const movie = results.flatMap((r) => (r.type === "movie" ? [r.movie] : []))[0];
-
-      expect(movie).toBeDefined();
-      expect(movie!.title.trim()).not.toBe("");
-      // original_title mirrors the title so the required canonical column is set.
-      expect(movie!.original_title?.trim()).not.toBe("");
-      expect(movie!.external_id).toStartWith("filmpalast-");
-      expect(movie!.source_url).toContain("/stream/");
+      const { downloads } = await findStreams({
+        media_type: "movie",
+        title: movieHit!.title,
+      });
 
       // Download links are absolute and de-duplicated by URL.
-      const urls = (movie!.downloads ?? []).map((d) => d.url);
+      const urls = downloads.map((d) => d.url);
       for (const url of urls) expect(url).toStartWith("http");
       expect(new Set(urls).size).toBe(urls.length);
     },
